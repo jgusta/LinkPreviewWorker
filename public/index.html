@@ -1,0 +1,425 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="color-scheme" content="light">
+    <meta name="description" content="Interactive test console for the ogp-worker API">
+    <title>ogp-worker</title>
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml">
+    <link rel="stylesheet" href="/styles.css">
+    <script src="/app.js" defer></script>
+  </head>
+  <body>
+    <div class="page-shell">
+      <header class="masthead">
+        <a class="wordmark" href="/" aria-label="ogp-worker home">
+          <span class="wordmark-mark" aria-hidden="true">LP</span>
+          <span>ogp-worker</span>
+        </a>
+        <div class="status-pill"><span class="status-dot"></span> Worker test page</div>
+      </header>
+
+      <main>
+        <section class="hero" aria-labelledby="page-title">
+          <div>
+            <p class="eyebrow">Inspect any public URL</p>
+            <h1 id="page-title">Opengraph <br>Preview API Test</h1>
+            <p class="intro">Fetch metadata, inspect the compressed assets, and compare nine sample looks.</p>
+          </div>
+          <div class="endpoint-card" aria-label="API endpoint">
+            <span class="method">GET</span>
+            <code>/preview?url=…</code>
+          </div>
+        </section>
+
+        <section class="request-panel" aria-labelledby="request-title">
+          <div class="section-heading">
+            <div>
+              <p class="section-number">01 / Request</p>
+              <h2 id="request-title">Choose a page</h2>
+            </div>
+            <span class="hint">HTTP and HTTPS only</span>
+          </div>
+
+          <form id="preview-form">
+            <label for="url-input">Page URL</label>
+            <div class="request-row">
+              <input id="url-input" name="url" type="url" value="https://www.cloudflare.com/" placeholder="https://example.com/article" autocomplete="url" spellcheck="false" required>
+              <button class="primary-button" type="submit">
+                <span class="button-label">Fetch preview</span>
+                <span class="button-loader" aria-hidden="true"></span>
+              </button>
+            </div>
+            <div class="form-footer">
+              <label class="check-control">
+                <input id="assets-input" type="checkbox" checked>
+                <span>Include compressed image and favicon data URLs</span>
+              </label>
+              <div class="examples" aria-label="Example URLs">
+                <span>Try</span>
+                <button type="button" data-example-url="https://example.com/">Example</button>
+                <button type="button" data-example-url="https://www.cloudflare.com/">Cloudflare</button>
+                <button type="button" data-example-url="https://openai.com/">OpenAI</button>
+              </div>
+            </div>
+          </form>
+        </section>
+
+        <div id="notice" class="notice" role="status" aria-live="polite" hidden></div>
+
+        <section id="empty-state" class="empty-state">
+          <div class="empty-orbit" aria-hidden="true"><span></span></div>
+          <p>Submit a URL to populate the preview and response inspector.</p>
+        </section>
+
+        <div id="results" class="results" hidden>
+          <section aria-labelledby="preview-title">
+            <div class="section-heading result-heading">
+              <div>
+                <p class="section-number">02 / Rendered result</p>
+                <h2 id="preview-title">Nine ways to publish it</h2>
+                <p class="section-intro">One API response, composed as nine distinct editorial previews.</p>
+              </div>
+              <span id="request-duration" class="hint"></span>
+            </div>
+
+            <div class="preview-gallery">
+              <article class="edition edition-gazette">
+                <header class="edition-header gazette-header">
+                  <div class="edition-kicker">The internet &amp; technology desk</div>
+                  <div class="edition-name">The OGP Worker Gazette</div>
+                  <div class="edition-meta">
+                    <time datetime="2026-08-16">Sunday, August 16, 2026</time>
+                    <span>Digital edition</span>
+                    <span>Vol. I, No. 1</span>
+                  </div>
+                </header>
+                <div class="gazette-layout">
+                  <div class="gazette-story">
+                    <p class="story-flag">Top story</p>
+                    <h3 data-preview-title>Untitled page</h3>
+                    <p class="story-deck" data-preview-description>No description returned.</p>
+                    <div class="edition-source">
+                      <span class="edition-favicon"><img data-preview-favicon alt="" hidden></span>
+                      <span data-preview-site>Unknown site</span>
+                      <span aria-hidden="true">·</span>
+                      <span data-preview-type>website</span>
+                    </div>
+                    <a class="edition-link" data-preview-url href="#" target="_blank" rel="noreferrer noopener"></a>
+                  </div>
+                  <div class="edition-image gazette-image">
+                    <img data-preview-image alt="" hidden>
+                    <div data-preview-image-empty>No preview image returned</div>
+                  </div>
+                </div>
+                <footer class="gazette-footer">
+                  <span>Metadata, compressed and ready for press</span>
+                  <span data-preview-site>Unknown site</span>
+                </footer>
+              </article>
+
+              <article class="edition edition-extra">
+                <header class="extra-header">
+                  <span class="extra-box">Latest news<br>as it happens</span>
+                  <div class="extra-name"><span>The</span> OGP Worker <b>Extra!</b></div>
+                  <span class="extra-box">Special edition<br>one response</span>
+                </header>
+                <div class="extra-meta">
+                  <span>Vol. I — No. 1</span>
+                  <time datetime="2026-08-16">Sunday, August 16, 2026 — Evening edition</time>
+                  <span>One click</span>
+                </div>
+                <div class="extra-layout">
+                  <div class="extra-story">
+                    <p class="extra-flag">Special extra</p>
+                    <h3 data-preview-title>Untitled page</h3>
+                    <p class="extra-deck" data-preview-description>No description returned.</p>
+                    <div class="extra-columns">
+                      <p>The preview desk reports a freshly fetched page, complete with its headline, summary, source artwork, and publisher mark.</p>
+                      <div class="edition-source">
+                        <span class="edition-favicon mono-favicon"><img data-preview-favicon alt="" hidden></span>
+                        <span data-preview-site>Unknown site</span>
+                      </div>
+                    </div>
+                  </div>
+                  <div>
+                    <div class="edition-image extra-image">
+                      <img data-preview-image alt="" hidden>
+                      <div data-preview-image-empty>No preview image returned</div>
+                    </div>
+                    <p class="image-caption">The original preview artwork, reproduced for this edition.</p>
+                    <a class="edition-link" data-preview-url href="#" target="_blank" rel="noreferrer noopener"></a>
+                  </div>
+                </div>
+              </article>
+
+              <div class="portrait-heading">
+                <p class="section-number">Portrait editions</p>
+                <h3>Front pages for narrower spaces</h3>
+              </div>
+
+              <div class="portrait-grid">
+                <article class="edition portrait-edition portrait-image-first">
+                  <header class="portrait-header">
+                    <div class="portrait-name">The Daily Ledger</div>
+                    <div class="portrait-meta"><time datetime="2026-08-16">Sunday, August 16, 2026</time><span>National edition</span></div>
+                  </header>
+                  <div class="edition-image portrait-image">
+                    <img data-preview-image alt="" hidden>
+                    <div data-preview-image-empty>No preview image returned</div>
+                  </div>
+                  <div class="portrait-copy">
+                    <h3 data-preview-title>Untitled page</h3>
+                    <p data-preview-description>No description returned.</p>
+                  </div>
+                  <div class="portrait-source edition-source">
+                    <span class="edition-favicon"><img data-preview-favicon alt="" hidden></span>
+                    <a data-preview-url href="#" target="_blank" rel="noreferrer noopener"><span data-preview-site>Unknown site</span></a>
+                  </div>
+                </article>
+
+                <article class="edition portrait-edition portrait-headline-first">
+                  <header class="portrait-header">
+                    <div class="portrait-name">The Daily Ledger</div>
+                    <div class="portrait-meta"><time datetime="2026-08-16">Sunday, August 16, 2026</time><span>Sunday edition</span></div>
+                  </header>
+                  <div class="portrait-copy portrait-lead-copy">
+                    <h3 data-preview-title>Untitled page</h3>
+                  </div>
+                  <div class="edition-image portrait-image">
+                    <img data-preview-image alt="" hidden>
+                    <div data-preview-image-empty>No preview image returned</div>
+                  </div>
+                  <div class="portrait-copy portrait-description">
+                    <p data-preview-description>No description returned.</p>
+                  </div>
+                  <div class="portrait-source edition-source">
+                    <span class="edition-favicon"><img data-preview-favicon alt="" hidden></span>
+                    <a data-preview-url href="#" target="_blank" rel="noreferrer noopener"><span data-preview-site>Unknown site</span></a>
+                  </div>
+                </article>
+
+                <article class="edition portrait-edition portrait-image-first edition-mono">
+                  <header class="portrait-header">
+                    <div class="portrait-name portrait-name-blackletter">The Daily Ledger</div>
+                    <div class="portrait-meta"><time datetime="2026-08-16">Sunday, August 16, 2026</time><span>Technology &amp; business</span></div>
+                  </header>
+                  <div class="edition-image portrait-image">
+                    <img data-preview-image alt="" hidden>
+                    <div data-preview-image-empty>No preview image returned</div>
+                  </div>
+                  <div class="portrait-copy">
+                    <h3 data-preview-title>Untitled page</h3>
+                    <p data-preview-description>No description returned.</p>
+                  </div>
+                  <div class="portrait-source edition-source">
+                    <span class="edition-favicon mono-favicon"><img data-preview-favicon alt="" hidden></span>
+                    <a data-preview-url href="#" target="_blank" rel="noreferrer noopener"><span data-preview-site>Unknown site</span></a>
+                  </div>
+                </article>
+
+                <article class="edition portrait-edition portrait-headline-first edition-mono">
+                  <header class="portrait-header">
+                    <div class="portrait-name portrait-name-blackletter">The Daily Chronicle</div>
+                    <div class="portrait-meta"><time datetime="2026-08-16">Sunday, August 16, 2026</time><span>National edition</span></div>
+                  </header>
+                  <div class="portrait-copy portrait-lead-copy">
+                    <h3 data-preview-title>Untitled page</h3>
+                  </div>
+                  <div class="edition-image portrait-image">
+                    <img data-preview-image alt="" hidden>
+                    <div data-preview-image-empty>No preview image returned</div>
+                  </div>
+                  <div class="portrait-copy portrait-description">
+                    <p data-preview-description>No description returned.</p>
+                  </div>
+                  <div class="portrait-source edition-source">
+                    <span class="edition-favicon mono-favicon"><img data-preview-favicon alt="" hidden></span>
+                    <a data-preview-url href="#" target="_blank" rel="noreferrer noopener"><span data-preview-site>Unknown site</span></a>
+                  </div>
+                </article>
+              </div>
+
+              <div class="portrait-heading newsstand-heading">
+                <p class="section-number">Newsstand editions</p>
+                <h3>Full front pages, filled to the margins</h3>
+                <p>Live preview data leads each edition; decorative columns complete the printed page.</p>
+              </div>
+
+              <div class="newsstand-grid">
+                <article class="edition dense-edition dense-broadsheet">
+                  <header class="dense-masthead">
+                    <span class="dense-edition-box">Late<br>extra</span>
+                    <div>
+                      <p>The internet &amp; technology desk</p>
+                      <div class="dense-paper-name">The OGP Worker Gazette</div>
+                    </div>
+                    <span class="dense-edition-box">Digital<br>edition</span>
+                  </header>
+                  <div class="dense-meta"><span>Vol. I, No. 1</span><time datetime="2026-08-16">Sunday, August 16, 2026</time><span>One penny</span></div>
+                  <h3 class="dense-headline" data-preview-title>Untitled page</h3>
+                  <p class="dense-deck" data-preview-description>No description returned.</p>
+                  <div class="dense-story-grid">
+                    <div class="filler-column" aria-hidden="true">
+                      <section><h4>Leading the web into the future</h4><p>From pages to previews, every detail is arranged for a clear first impression.</p><div class="filler-lines"><span></span><span></span><span></span></div></section>
+                      <section><h4>Speed, security, reliability</h4><p>Small signals become a complete story when structure and type work together.</p><div class="filler-lines"><span></span><span></span></div></section>
+                      <section><h4>Built for readers</h4><p>Headline, source, and artwork remain the center of every edition.</p><div class="filler-lines"><span></span><span></span><span></span></div></section>
+                    </div>
+                    <div class="dense-center">
+                      <div class="edition-image dense-image dense-image-mono">
+                        <img data-preview-image alt="" hidden>
+                        <div data-preview-image-empty>No preview image returned</div>
+                      </div>
+                      <p class="dense-caption">Preview artwork reproduced from the published page.</p>
+                    </div>
+                    <div class="filler-column" aria-hidden="true">
+                      <section><h4>The agent era is here</h4><p>Metadata, imagery, and identity are gathered into one compact report.</p><div class="filler-lines"><span></span><span></span><span></span></div></section>
+                      <section><h4>One platform, many stories</h4><p>A flexible layout helps every link find its strongest editorial voice.</p><div class="filler-lines"><span></span><span></span></div></section>
+                      <section><h4>Published with confidence</h4><p>The page stays readable from broad desktop columns to a narrow screen.</p><div class="filler-lines"><span></span><span></span><span></span></div></section>
+                    </div>
+                  </div>
+                  <div class="dense-bottom-grid" aria-hidden="true">
+                    <section><h4>Performance at the edge</h4><p>Fast retrieval keeps every headline moving.</p><div class="filler-lines"><span></span><span></span></div></section>
+                    <section><h4>Security without compromise</h4><p>Validated links and careful fetching protect the reader.</p><div class="filler-lines"><span></span><span></span></div></section>
+                    <section><h4>Build, deploy, scale</h4><p>One response can power many visual treatments.</p><div class="filler-lines"><span></span><span></span></div></section>
+                  </div>
+                  <footer class="dense-source">
+                    <span class="edition-favicon mono-favicon"><img data-preview-favicon alt="" hidden></span>
+                    <div><strong data-preview-site>Unknown site</strong><span data-preview-type>website</span></div>
+                    <a class="edition-link" data-preview-url href="#" target="_blank" rel="noreferrer noopener"></a>
+                  </footer>
+                </article>
+
+                <article class="edition dense-edition dense-tabloid">
+                  <div class="tabloid-ribbon"><span></span>Special edition<span></span></div>
+                  <header class="dense-masthead tabloid-masthead">
+                    <span class="dense-edition-box">Late<br>extra</span>
+                    <div class="dense-paper-name">The OGP Worker Gazette</div>
+                    <span class="dense-edition-box">Full<br>report</span>
+                  </header>
+                  <div class="dense-meta"><time datetime="2026-08-16">Sunday, August 16, 2026</time><span>Digital edition</span><span>One penny</span></div>
+                  <h3 class="dense-headline tabloid-headline" data-preview-title>Untitled page</h3>
+                  <div class="edition-image dense-image tabloid-image">
+                    <img data-preview-image alt="" hidden>
+                    <div data-preview-image-empty>No preview image returned</div>
+                  </div>
+                  <p class="dense-deck tabloid-deck" data-preview-description>No description returned.</p>
+                  <div class="tabloid-standfirst" aria-hidden="true">The complete story, fetched and composed from a single public page.</div>
+                  <div class="tabloid-footer">
+                    <div class="dense-source tabloid-source">
+                      <span class="edition-favicon"><img data-preview-favicon alt="" hidden></span>
+                      <div><strong data-preview-site>Unknown site</strong><span data-preview-type>website</span></div>
+                      <a class="edition-link" data-preview-url href="#" target="_blank" rel="noreferrer noopener"></a>
+                    </div>
+                    <div class="tabloid-fillers" aria-hidden="true">
+                      <section><h4>The story at a glance</h4><p>Headline and artwork lead the page.</p><div class="filler-lines"><span></span><span></span></div></section>
+                      <section><h4>Built for any screen</h4><p>Editorial structure that travels well.</p><div class="filler-lines"><span></span><span></span></div></section>
+                      <section><h4>Read, share, return</h4><p>A clear source closes the edition.</p><div class="filler-lines"><span></span><span></span></div></section>
+                    </div>
+                  </div>
+                  <div class="tabloid-signoff" aria-hidden="true">Build boldly · publish clearly · read everywhere</div>
+                </article>
+
+                <article class="edition dense-edition dense-archive">
+                  <header class="dense-masthead archive-masthead">
+                    <span class="dense-edition-box">Late<br>extra</span>
+                    <div>
+                      <p>The internet &amp; technology desk</p>
+                      <div class="dense-paper-name">The OGP Worker Gazette</div>
+                    </div>
+                    <span class="dense-edition-box">Archive<br>extra</span>
+                  </header>
+                  <div class="dense-meta"><span>Established 2026</span><time datetime="2026-08-16">Sunday, August 16, 2026</time><span>Digital edition</span></div>
+                  <h3 class="dense-headline archive-headline" data-preview-title>Untitled page</h3>
+                  <p class="dense-deck archive-deck" data-preview-description>No description returned.</p>
+                  <div class="dense-story-grid archive-story-grid">
+                    <div class="filler-column" aria-hidden="true">
+                      <section><h4>Top stories</h4><p>Every link begins with a source, a title, and a visual signal.</p></section>
+                      <section><h4>Built for developers</h4><p>The edition balances structure with flexible content.</p><div class="filler-lines"><span></span><span></span></div></section>
+                      <section><h4>Security at the edge</h4><p>Public addresses are checked before the presses roll.</p><div class="filler-lines"><span></span><span></span><span></span></div></section>
+                      <section><h4>Reliable by design</h4><p>Responsive columns preserve the hierarchy.</p></section>
+                    </div>
+                    <div class="dense-center">
+                      <div class="edition-image dense-image dense-image-mono archive-image">
+                        <img data-preview-image alt="" hidden>
+                        <div data-preview-image-empty>No preview image returned</div>
+                      </div>
+                    </div>
+                    <div class="filler-column" aria-hidden="true">
+                      <section><h4>Inside the network</h4><p>Compressed artwork keeps the edition light enough to travel.</p><div class="filler-lines"><span></span><span></span></div></section>
+                      <section><h4>Observability first</h4><p>Response details remain close at hand below every design.</p></section>
+                      <section><h4>Open &amp; interoperable</h4><p>A simple schema can feed many different front pages.</p><div class="filler-lines"><span></span><span></span><span></span></div></section>
+                      <section><h4>Trusted worldwide</h4><p>The publisher mark carries through every edition.</p></section>
+                    </div>
+                  </div>
+                  <div class="archive-columns" aria-hidden="true">
+                    <section><h4>From the desk</h4><p>The page is ready for print, preview, and reference.</p><div class="filler-lines"><span></span><span></span><span></span></div></section>
+                    <section><h4>Inside the network</h4><p>Every request becomes a composed editorial object.</p><div class="filler-lines"><span></span><span></span></div></section>
+                    <section><h4>By the numbers</h4><p>One page. Nine designs. A single source of truth.</p><div class="filler-lines"><span></span><span></span><span></span></div></section>
+                    <section><h4>Page notes</h4><p>Filler copy is decorative; the live story remains clear.</p><div class="filler-lines"><span></span><span></span></div></section>
+                  </div>
+                  <footer class="dense-source archive-source">
+                    <span class="edition-favicon mono-favicon"><img data-preview-favicon alt="" hidden></span>
+                    <div><strong data-preview-site>Unknown site</strong><span data-preview-type>website</span></div>
+                    <a class="edition-link" data-preview-url href="#" target="_blank" rel="noreferrer noopener"></a>
+                  </footer>
+                  <div class="archive-signoff" aria-hidden="true">Fast network · smart security · global scale · built for readers</div>
+                </article>
+              </div>
+            </div>
+          </section>
+
+          <section class="inspection-section" aria-labelledby="details-title">
+            <div class="section-heading">
+              <div>
+                <p class="section-number">03 / Inspect</p>
+                <h2 id="details-title">Response details</h2>
+              </div>
+              <button id="copy-json" class="secondary-button" type="button">Copy full JSON</button>
+            </div>
+
+            <div class="detail-grid">
+              <dl class="detail-list">
+                <div><dt>Requested URL</dt><dd id="requested-url"></dd></div>
+                <div><dt>Final URL</dt><dd id="final-url"></dd></div>
+                <div><dt>Canonical URL</dt><dd id="canonical-url"></dd></div>
+                <div><dt>Preview image</dt><dd id="image-info"></dd></div>
+                <div><dt>Favicon</dt><dd id="favicon-info"></dd></div>
+              </dl>
+
+              <div class="warnings-panel">
+                <h3>Warnings</h3>
+                <ul id="warnings-list"></ul>
+                <p id="warnings-empty" class="quiet">No warnings returned.</p>
+              </div>
+            </div>
+
+            <div class="data-panels">
+              <details open>
+                <summary>Metadata <span id="meta-count" class="count-badge">0</span></summary>
+                <div class="table-wrap">
+                  <table>
+                    <thead><tr><th>Property</th><th>Value</th></tr></thead>
+                    <tbody id="meta-body"></tbody>
+                  </table>
+                  <p id="meta-empty" class="quiet panel-empty">No Open Graph or Twitter metadata returned.</p>
+                </div>
+              </details>
+
+              <details>
+                <summary>Raw response <span class="raw-note">data URLs shortened here</span></summary>
+                <pre id="raw-json"></pre>
+              </details>
+            </div>
+          </section>
+        </div>
+      </main>
+
+      <footer>
+        <span>ogp-worker</span>
+        <a href="/health" target="_blank" rel="noreferrer">Health endpoint ↗</a>
+      </footer>
+    </div>
+  </body>
+</html>
