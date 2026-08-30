@@ -18,7 +18,7 @@
     "run_worker_first": ["/preview", "/health"]
   },
   "vars": {
-    "ALLOWED_ORIGINS": "*",
+    "ALLOWED_ORIGINS": "https://crazywall.cc,http://localhost",
     "FETCH_TIMEOUT_MS": "10000",
     "MAX_HTML_BYTES": "1048576",
     "MAX_ASSET_BYTES": "20971520"
