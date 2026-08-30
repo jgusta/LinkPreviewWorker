@@ -94,3 +94,9 @@ Before exposing this Worker publicly, set `ALLOWED_ORIGINS` to your website and 
 npm run deploy:check
 npm run deploy
 ```
+
+The production deployment serves both the test console and API at:
+
+- Test console: `https://ogp-worker.crazywall.cc/`
+- Preview API: `https://ogp-worker.crazywall.cc/preview`
+- Health check: `https://ogp-worker.crazywall.cc/health`
