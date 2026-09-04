@@ -6,6 +6,14 @@
   font-weight: 700;
 }
 
+@font-face {
+  font-family: "Placeholder";
+  src: url("/fonts/Placeholder-Regular.woff2") format("woff2");
+  font-display: swap;
+  font-style: normal;
+  font-weight: 700;
+}
+
 :root {
   --ink: #16201d;
   --ink-soft: #53605b;
@@ -125,7 +133,7 @@ a:focus-visible, button:focus-visible, input:focus-visible, summary:focus-visibl
 h1 {
   max-width: 780px;
   margin: 0;
-  font-family: Georgia, "Times New Roman", serif;
+  font-family: Georgia, "Placeholder", serif;
   font-size: clamp(44px, 6.3vw, 78px);
   font-weight: 500;
   letter-spacing: -.055em;
@@ -332,7 +340,7 @@ form > label {
 
 .edition h3 {
   margin: 0;
-  font-family: Georgia, "Times New Roman", serif;
+  font-family: Georgia, "Placeholder", serif;
   font-weight: 500;
   letter-spacing: -.052em;
   line-height: .95;
@@ -383,50 +391,50 @@ form > label {
 .edition-header { padding: 22px 28px 0; }
 .gazette-header { text-align: center; }
 .edition-kicker { margin-bottom: 10px; color: var(--accent-dark); font: 800 10px/1 ui-monospace, SFMono-Regular, Menlo, monospace; letter-spacing: .16em; text-transform: uppercase; }
-.edition-name { padding: 9px 0 13px; border-top: 1px solid var(--ink); border-bottom: 4px double var(--ink); font: 500 clamp(40px, 6vw, 72px)/.9 Georgia, "Times New Roman", serif; letter-spacing: -.055em; }
+.edition-name { padding: 9px 0 13px; border-top: 1px solid var(--ink); border-bottom: 4px double var(--ink); font: 500 clamp(40px, 6vw, 72px)/.9 Georgia, "Placeholder", serif; letter-spacing: -.055em; }
 .edition-meta { display: flex; justify-content: space-between; gap: 18px; padding: 10px 2px; border-bottom: 1px solid var(--ink); font: 700 10px/1.25 ui-monospace, SFMono-Regular, Menlo, monospace; letter-spacing: .04em; text-transform: uppercase; }
 .gazette-layout { display: grid; gap: 24px; padding: 28px; }
 .gazette-story { display: flex; min-width: 0; flex-direction: column; justify-content: center; }
 .story-flag, .extra-flag { margin: 0 0 14px; color: var(--accent-dark); font: 900 11px/1 ui-monospace, SFMono-Regular, Menlo, monospace; letter-spacing: .14em; text-transform: uppercase; }
 .gazette-story h3 { max-width: 1030px; font-size: clamp(58px, 8.6vw, 110px); }
-.story-deck { max-width: 880px; margin: 18px 0; color: var(--ink-soft); font: 22px/1.35 Georgia, "Times New Roman", serif; }
+.story-deck { max-width: 880px; margin: 18px 0; color: var(--ink-soft); font: 22px/1.35 Georgia, "Placeholder", serif; }
 .gazette-story .edition-link { margin-top: 13px; }
 .gazette-image { min-height: 360px; border-top: 1px solid var(--ink); }
 .gazette-footer { display: flex; justify-content: space-between; gap: 20px; padding: 12px 28px; border-top: 1px solid var(--ink); background: var(--mint); font: 800 10px/1.3 ui-monospace, SFMono-Regular, Menlo, monospace; letter-spacing: .04em; text-transform: uppercase; }
 
 .edition-extra { padding: 22px; border: 5px double #241e16; background: #eee2c9; color: #241e16; }
 .extra-header { display: grid; grid-template-columns: 145px 1fr 145px; gap: 18px; align-items: center; padding-bottom: 12px; border-bottom: 4px double currentColor; }
-.extra-box { padding: 12px 8px; border: 2px solid currentColor; font: 700 11px/1.45 Georgia, "Times New Roman", serif; text-align: center; text-transform: uppercase; }
-.extra-name { font: 800 clamp(38px, 5.7vw, 70px)/.82 "Times New Roman", Georgia, serif; letter-spacing: -.04em; text-align: center; text-transform: uppercase; }
+.extra-box { padding: 12px 8px; border: 2px solid currentColor; font: 700 11px/1.45 Georgia, "Placeholder", serif; text-align: center; text-transform: uppercase; }
+.extra-name { font: 800 clamp(38px, 5.7vw, 70px)/.82 "Placeholder", Georgia, serif; letter-spacing: -.04em; text-align: center; text-transform: uppercase; }
 .extra-name span { display: inline-block; margin-right: 8px; font-size: .5em; font-style: italic; transform: rotate(-7deg); }
 .extra-name b { display: inline-block; padding: 6px 10px 3px; border: 2px solid currentColor; font-size: .7em; }
-.extra-meta { display: flex; justify-content: space-between; gap: 14px; padding: 9px 2px; border-bottom: 2px solid currentColor; font: 700 11px/1.2 Georgia, "Times New Roman", serif; letter-spacing: .03em; text-transform: uppercase; }
+.extra-meta { display: flex; justify-content: space-between; gap: 14px; padding: 9px 2px; border-bottom: 2px solid currentColor; font: 700 11px/1.2 Georgia, "Placeholder", serif; letter-spacing: .03em; text-transform: uppercase; }
 .extra-layout { display: grid; grid-template-columns: minmax(0, 1fr) minmax(360px, 1fr); gap: 22px; padding-top: 22px; }
 .extra-story { padding-right: 22px; border-right: 1px solid currentColor; }
 .extra-story h3 { font-family: Impact, Haettenschweiler, "Arial Narrow Bold", sans-serif; font-size: clamp(54px, 8vw, 104px); font-weight: 900; letter-spacing: -.035em; line-height: .86; text-transform: uppercase; }
-.extra-deck { margin: 16px 0; padding: 12px 0; border-top: 1px solid currentColor; border-bottom: 1px solid currentColor; font: 700 19px/1.2 Georgia, "Times New Roman", serif; }
+.extra-deck { margin: 16px 0; padding: 12px 0; border-top: 1px solid currentColor; border-bottom: 1px solid currentColor; font: 700 19px/1.2 Georgia, "Placeholder", serif; }
 .extra-columns { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
-.extra-columns p { margin: 0; font: 15px/1.35 Georgia, "Times New Roman", serif; }
+.extra-columns p { margin: 0; font: 15px/1.35 Georgia, "Placeholder", serif; }
 .extra-columns .edition-source { align-self: end; }
 .extra-image { min-height: 390px; border: 1px solid currentColor; }
 .extra-image img { filter: grayscale(1) contrast(1.25); mix-blend-mode: multiply; }
-.image-caption { margin: 7px 0 16px; padding-bottom: 8px; border-bottom: 1px solid currentColor; font: italic 12px/1.35 Georgia, "Times New Roman", serif; }
+.image-caption { margin: 7px 0 16px; padding-bottom: 8px; border-bottom: 1px solid currentColor; font: italic 12px/1.35 Georgia, "Placeholder", serif; }
 .edition-extra .edition-link { color: currentColor; }
 .mono-favicon img { filter: grayscale(1) contrast(1.6); mix-blend-mode: multiply; }
 
 .portrait-heading { padding-top: 14px; border-top: 1px solid var(--line); }
 .portrait-heading .section-number { margin-bottom: 8px; }
-.portrait-heading h3 { margin: 0; font: 500 clamp(30px, 4vw, 48px)/1 Georgia, "Times New Roman", serif; letter-spacing: -.04em; }
+.portrait-heading h3 { margin: 0; font: 500 clamp(30px, 4vw, 48px)/1 Georgia, "Placeholder", serif; letter-spacing: -.04em; }
 .portrait-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 28px; align-items: stretch; }
 .portrait-edition { display: flex; min-height: 790px; flex-direction: column; padding: 20px; border-width: 2px; }
 .portrait-header { padding-bottom: 12px; border-top: 4px double currentColor; border-bottom: 4px double currentColor; text-align: center; }
-.portrait-name { padding: 14px 0 10px; font: 500 clamp(38px, 5vw, 64px)/.9 Georgia, "Times New Roman", serif; letter-spacing: -.05em; }
-.portrait-name-blackletter { font-family: "Times New Roman", Georgia, serif; font-weight: 800; letter-spacing: -.04em; }
+.portrait-name { padding: 14px 0 10px; font: 500 clamp(38px, 5vw, 64px)/.9 Georgia, "Placeholder", serif; letter-spacing: -.05em; }
+.portrait-name-blackletter { font-family: "Placeholder", Georgia, serif; font-weight: 800; letter-spacing: -.04em; }
 .portrait-meta { display: flex; justify-content: space-between; gap: 10px; font: 700 9px/1.2 ui-monospace, SFMono-Regular, Menlo, monospace; letter-spacing: .03em; text-transform: uppercase; }
 .portrait-image { min-height: 320px; margin-top: 16px; border-bottom: 1px solid currentColor; }
 .portrait-copy { padding: 19px 5px 16px; }
 .portrait-copy h3 { font-size: clamp(48px, 5.4vw, 72px); }
-.portrait-copy p { margin: 15px 0 0; padding-top: 14px; border-top: 3px solid var(--accent); font: 21px/1.28 Georgia, "Times New Roman", serif; }
+.portrait-copy p { margin: 15px 0 0; padding-top: 14px; border-top: 3px solid var(--accent); font: 21px/1.28 Georgia, "Placeholder", serif; }
 .portrait-source { margin-top: auto; padding: 13px 5px 2px; border-top: 1px solid currentColor; }
 .portrait-source a { min-width: 0; overflow: hidden; color: currentColor; text-overflow: ellipsis; white-space: nowrap; }
 .portrait-headline-first .portrait-lead-copy { padding-bottom: 18px; }
@@ -446,10 +454,10 @@ form > label {
 .dense-masthead { display: grid; grid-template-columns: 108px 1fr 108px; gap: 15px; align-items: center; padding-bottom: 10px; border-bottom: 3px double currentColor; text-align: center; }
 .dense-masthead p { margin: 0 0 5px; font: 800 9px/1.2 ui-monospace, SFMono-Regular, Menlo, monospace; letter-spacing: .13em; text-transform: uppercase; }
 .dense-paper-name { font: 700 clamp(38px, 5vw, 56px)/.9 "UnifrakturCook", "Old English Text MT", "Apple Chancery", Georgia, serif; letter-spacing: -.035em; white-space: nowrap; }
-.dense-edition-box { padding: 10px 5px; border: 1px solid currentColor; font: 900 11px/1.25 Georgia, "Times New Roman", serif; letter-spacing: .08em; text-transform: uppercase; }
+.dense-edition-box { padding: 10px 5px; border: 1px solid currentColor; font: 900 11px/1.25 Georgia, "Placeholder", serif; letter-spacing: .08em; text-transform: uppercase; }
 .dense-meta { display: flex; justify-content: space-between; gap: 14px; padding: 8px 0; border-bottom: 1px solid currentColor; font: 800 9px/1.2 ui-monospace, SFMono-Regular, Menlo, monospace; letter-spacing: .04em; text-transform: uppercase; }
 .dense-headline { padding: 17px 0 12px; border-bottom: 3px double currentColor; font-family: Impact, Haettenschweiler, "Arial Narrow Bold", sans-serif !important; font-size: clamp(62px, 8.5vw, 104px); font-weight: 900 !important; letter-spacing: -.035em !important; line-height: .87 !important; text-align: center; text-transform: uppercase; }
-.dense-deck { margin: 0; padding: 11px 5px; border-bottom: 1px solid currentColor; font: 700 clamp(18px, 2.8vw, 28px)/1.08 Georgia, "Times New Roman", serif; text-align: center; }
+.dense-deck { margin: 0; padding: 11px 5px; border-bottom: 1px solid currentColor; font: 700 clamp(18px, 2.8vw, 28px)/1.08 Georgia, "Placeholder", serif; text-align: center; }
 .dense-story-grid { display: grid; grid-template-columns: 150px minmax(0, 1fr) 150px; grid-template-areas: "left center right"; gap: 11px; padding: 12px 0; border-bottom: 1px solid currentColor; }
 .dense-story-grid > .filler-column:first-child { grid-area: left; }
 .dense-story-grid > .dense-center { grid-area: center; }
@@ -459,8 +467,8 @@ form > label {
 .filler-column:last-child { padding-left: 10px; border-left: 1px solid currentColor; }
 .filler-column section { padding: 0 0 11px; margin-bottom: 11px; border-bottom: 1px solid rgb(33 28 21 / 55%); }
 .filler-column section:last-child { margin-bottom: 0; border-bottom: 0; }
-.filler-column h4, .dense-bottom-grid h4, .tabloid-fillers h4, .archive-columns h4 { margin: 0 0 7px; font: 800 14px/1.08 Georgia, "Times New Roman", serif; text-align: center; text-transform: uppercase; }
-.filler-column p, .dense-bottom-grid p, .tabloid-fillers p, .archive-columns p { margin: 0; font: 12px/1.32 Georgia, "Times New Roman", serif; }
+.filler-column h4, .dense-bottom-grid h4, .tabloid-fillers h4, .archive-columns h4 { margin: 0 0 7px; font: 800 14px/1.08 Georgia, "Placeholder", serif; text-align: center; text-transform: uppercase; }
+.filler-column p, .dense-bottom-grid p, .tabloid-fillers p, .archive-columns p { margin: 0; font: 12px/1.32 Georgia, "Placeholder", serif; }
 .filler-lines { display: grid; gap: 4px; margin-top: 8px; }
 .filler-lines span { display: block; width: 100%; border-bottom: 2px solid rgb(33 28 21 / 22%); }
 .filler-lines span:nth-child(2n) { width: 84%; }
@@ -468,7 +476,7 @@ form > label {
 .dense-center { min-width: 0; }
 .dense-image { min-height: 525px; border: 1px solid currentColor; }
 .dense-image-mono img { filter: grayscale(1) contrast(1.55); mix-blend-mode: multiply; }
-.dense-caption { margin: 5px 0 0; font: italic 10px/1.3 Georgia, "Times New Roman", serif; text-align: center; }
+.dense-caption { margin: 5px 0 0; font: italic 10px/1.3 Georgia, "Placeholder", serif; text-align: center; }
 .dense-bottom-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); border-bottom: 1px solid currentColor; }
 .dense-bottom-grid section { padding: 12px; border-right: 1px solid currentColor; }
 .dense-bottom-grid section:last-child { border-right: 0; }
@@ -484,14 +492,14 @@ form > label {
 .tabloid-headline { padding-top: 15px; border-bottom: 0; font-size: clamp(68px, 10vw, 116px); }
 .tabloid-image { min-height: 470px; }
 .tabloid-deck { border-top: 1px solid currentColor; font-size: clamp(20px, 3vw, 31px); }
-.tabloid-standfirst { padding: 9px 20px; border-bottom: 1px solid currentColor; color: rgb(33 28 21 / 74%); font: 700 12px/1.35 Georgia, "Times New Roman", serif; text-align: center; }
+.tabloid-standfirst { padding: 9px 20px; border-bottom: 1px solid currentColor; color: rgb(33 28 21 / 74%); font: 700 12px/1.35 Georgia, "Placeholder", serif; text-align: center; }
 .tabloid-footer { display: grid; grid-template-columns: 210px 1fr; border-bottom: 1px solid currentColor; }
 .tabloid-source { align-content: center; padding: 14px 12px; border-right: 1px solid currentColor; }
 .tabloid-source a { grid-column: 1 / -1; }
 .tabloid-fillers { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); }
 .tabloid-fillers section { padding: 12px; border-right: 1px solid currentColor; }
 .tabloid-fillers section:last-child { border-right: 0; }
-.tabloid-signoff, .archive-signoff { padding: 8px 0 0; font: 900 12px/1.2 Georgia, "Times New Roman", serif; letter-spacing: .11em; text-align: center; text-transform: uppercase; }
+.tabloid-signoff, .archive-signoff { padding: 8px 0 0; font: 900 12px/1.2 Georgia, "Placeholder", serif; letter-spacing: .11em; text-align: center; text-transform: uppercase; }
 
 .dense-archive { border-width: 3px; background: #e8d6b5; }
 .archive-headline { font-size: clamp(60px, 8vw, 96px); }
