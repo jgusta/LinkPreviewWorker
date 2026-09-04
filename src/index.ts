@@ -9,7 +9,7 @@ import {
 } from "./network";
 import type { EmbeddedAsset, LinkPreview, PreviewOptions } from "./types";
 
-const USER_AGENT = "ogp-worker/0.1 (+https://workers.cloudflare.com/)";
+const USER_AGENT = "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/152.0.0.0 Safari/537.36";
 
 export default {
   async fetch(request: Request, env: Env): Promise<Response> {

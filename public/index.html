@@ -12,40 +12,23 @@
   </head>
   <body>
     <div class="page-shell">
-      <header class="masthead">
-        <a class="wordmark" href="/" aria-label="ogp-worker home">
-          <span class="wordmark-mark" aria-hidden="true">LP</span>
-          <span>ogp-worker</span>
-        </a>
-        <div class="status-pill"><span class="status-dot"></span> Worker test page</div>
-      </header>
+
 
       <main>
         <section class="hero" aria-labelledby="page-title">
           <div>
-            <p class="eyebrow">Inspect any public URL</p>
             <h1 id="page-title">Opengraph <br>Preview API Test</h1>
-            <p class="intro">Fetch metadata, inspect the compressed assets, and compare nine sample looks.</p>
-          </div>
-          <div class="endpoint-card" aria-label="API endpoint">
-            <span class="method">GET</span>
-            <code>/preview?url=…</code>
+
           </div>
         </section>
 
         <section class="request-panel" aria-labelledby="request-title">
-          <div class="section-heading">
-            <div>
-              <p class="section-number">01 / Request</p>
-              <h2 id="request-title">Choose a page</h2>
-            </div>
-            <span class="hint">HTTPS assumed if omitted</span>
-          </div>
+
 
           <form id="preview-form">
             <label for="url-input">Page URL</label>
             <div class="request-row">
-              <input id="url-input" name="url" type="text" inputmode="url" value="https://www.cloudflare.com/" placeholder="example.com/article" autocomplete="url" autocapitalize="none" spellcheck="false" required>
+              <input id="url-input" name="url" type="text" inputmode="url" value="" placeholder="example.com/article" autocomplete="none" autocapitalize="none" spellcheck="false" required>
               <button class="primary-button" type="submit">
                 <span class="button-label">Fetch preview</span>
                 <span class="button-loader" aria-hidden="true"></span>
@@ -77,9 +60,7 @@
           <section aria-labelledby="preview-title">
             <div class="section-heading result-heading">
               <div>
-                <p class="section-number">02 / Rendered result</p>
-                <h2 id="preview-title">Nine ways to publish it</h2>
-                <p class="section-intro">One API response, composed as nine distinct editorial previews.</p>
+                <h2 id="preview-title">Results</h2>
               </div>
               <span id="request-duration" class="hint"></span>
             </div>
@@ -113,17 +94,13 @@
                     <div data-preview-image-empty>No preview image returned</div>
                   </div>
                 </div>
-                <footer class="gazette-footer">
-                  <span>Metadata, compressed and ready for press</span>
-                  <span data-preview-site>Unknown site</span>
-                </footer>
               </article>
 
               <article class="edition edition-extra">
                 <header class="extra-header">
                   <span class="extra-box">Latest news<br>as it happens</span>
                   <div class="extra-name"><span>The</span> OGP Worker <b>Extra!</b></div>
-                  <span class="extra-box">Special edition<br>one response</span>
+                  <span class="extra-box">Special edition</span>
                 </header>
                 <div class="extra-meta">
                   <span>Vol. I — No. 1</span>
@@ -136,7 +113,7 @@
                     <h3 data-preview-title>Untitled page</h3>
                     <p class="extra-deck" data-preview-description>No description returned.</p>
                     <div class="extra-columns">
-                      <p>The preview desk reports a freshly fetched page, complete with its headline, summary, source artwork, and publisher mark.</p>
+                      <p>Blah blah blah blah blah. Blahs blahss blaghhh.</p>
                       <div class="edition-source">
                         <span class="edition-favicon mono-favicon"><img data-preview-favicon alt="" hidden></span>
                         <span data-preview-site>Unknown site</span>
@@ -148,15 +125,15 @@
                       <img data-preview-image alt="" hidden>
                       <div data-preview-image-empty>No preview image returned</div>
                     </div>
-                    <p class="image-caption">The original preview artwork, reproduced for this edition.</p>
+                    <p class="image-caption">Blah blah blah blah blah.</p>
                     <a class="edition-link" data-preview-url href="#" target="_blank" rel="noreferrer noopener"></a>
                   </div>
                 </div>
               </article>
 
               <div class="portrait-heading">
-                <p class="section-number">Portrait editions</p>
-                <h3>Front pages for narrower spaces</h3>
+                <p class="section-number">Blah blah blah blah blah</p>
+                <h3>Blah blah blah blah blah</h3>
               </div>
 
               <div class="portrait-grid">
@@ -241,12 +218,6 @@
                 </article>
               </div>
 
-              <div class="portrait-heading newsstand-heading">
-                <p class="section-number">Newsstand editions</p>
-                <h3>Full front pages, filled to the margins</h3>
-                <p>Live preview data leads each edition; decorative columns complete the printed page.</p>
-              </div>
-
               <div class="newsstand-grid">
                 <article class="edition dense-edition dense-broadsheet">
                   <header class="dense-masthead">
@@ -262,27 +233,27 @@
                   <p class="dense-deck" data-preview-description>No description returned.</p>
                   <div class="dense-story-grid">
                     <div class="filler-column" aria-hidden="true">
-                      <section><h4>Leading the web into the future</h4><p>From pages to previews, every detail is arranged for a clear first impression.</p><div class="filler-lines"><span></span><span></span><span></span></div></section>
-                      <section><h4>Speed, security, reliability</h4><p>Small signals become a complete story when structure and type work together.</p><div class="filler-lines"><span></span><span></span></div></section>
-                      <section><h4>Built for readers</h4><p>Headline, source, and artwork remain the center of every edition.</p><div class="filler-lines"><span></span><span></span><span></span></div></section>
+                      <section><h4>Blah blah blah blah blah. Blahs blahss blaghhh.</h4><p>Blah blah blah blah blah. Blahs blahss blaghhh. Blah blah blah blah blah. Blahs blahss blaghhh.</p><div class="filler-lines"><span></span><span></span><span></span></div></section>
+                      <section><h4>Blah blah blah blah blah. Blahs blahss blaghhh.</h4><p>Blah blah blah blah blah. Blahs blahss blaghhh. Blah blah blah blah blah. Blahs blahss blaghhh.</p><div class="filler-lines"><span></span><span></span></div></section>
+                      <section><h4>Blah blah blah blah blah. Blahs blahss blaghhh.</h4><p>Blah blah blah blah blah. Blahs blahss blaghhh. Blah blah blah blah blah. Blahs blahss blaghhh.</p><div class="filler-lines"><span></span><span></span><span></span></div></section>
                     </div>
                     <div class="dense-center">
                       <div class="edition-image dense-image dense-image-mono">
                         <img data-preview-image alt="" hidden>
                         <div data-preview-image-empty>No preview image returned</div>
                       </div>
-                      <p class="dense-caption">Preview artwork reproduced from the published page.</p>
+                      <p class="dense-caption">Blah blah blah blah blah. Blahs blahss blaghhh.</p>
                     </div>
                     <div class="filler-column" aria-hidden="true">
-                      <section><h4>The agent era is here</h4><p>Metadata, imagery, and identity are gathered into one compact report.</p><div class="filler-lines"><span></span><span></span><span></span></div></section>
-                      <section><h4>One platform, many stories</h4><p>A flexible layout helps every link find its strongest editorial voice.</p><div class="filler-lines"><span></span><span></span></div></section>
-                      <section><h4>Published with confidence</h4><p>The page stays readable from broad desktop columns to a narrow screen.</p><div class="filler-lines"><span></span><span></span><span></span></div></section>
+                      <section><h4>TBlah blah blah blah blah. Blahs blahss blaghhh.</h4><p>MBlah blah blah blah blah. Blahs blahss blaghhh.</p><div class="filler-lines"><span></span><span></span><span></span></div></section>
+                      <section><h4>Blah blah blah blah blah. Blahs blahss blaghhh. Blah blah blah blah blah. Blahs blahss blaghhh.</h4><p>Blah blah blah blah blah. Blahs blahss blaghhh.Blah blah blah blah blah. Blahs blahss blaghhh.</p><div class="filler-lines"><span></span><span></span></div></section>
+                      <section><h4>Blah blah blah blah blah. Blahs blahss blaghhh.</h4><p>Blah blah blah blah blah. Blahs blahss blaghhh.</p><div class="filler-lines"><span></span><span></span><span></span></div></section>
                     </div>
                   </div>
                   <div class="dense-bottom-grid" aria-hidden="true">
-                    <section><h4>Performance at the edge</h4><p>Fast retrieval keeps every headline moving.</p><div class="filler-lines"><span></span><span></span></div></section>
-                    <section><h4>Security without compromise</h4><p>Validated links and careful fetching protect the reader.</p><div class="filler-lines"><span></span><span></span></div></section>
-                    <section><h4>Build, deploy, scale</h4><p>One response can power many visual treatments.</p><div class="filler-lines"><span></span><span></span></div></section>
+                    <section><h4>Blah blah blah blah blah. Blahs blahss blaghhh.</h4><p>Blah blah blah blah blah. Blahs blahss blaghhh.</p><div class="filler-lines"><span></span><span></span></div></section>
+                    <section><h4>Blah blah blah blah blah. Blahs blahss blaghhh.</h4><p>Blah blah blah blah blah. Blahs blahss blaghhh.</p><div class="filler-lines"><span></span><span></span></div></section>
+                    <section><h4>Blah blah blah blah blah. Blahs blahss blaghhh.</h4><p>Blah blah blah blahblah. Blahsblahss blaghhh.</p><div class="filler-lines"><span></span><span></span></div></section>
                   </div>
                   <footer class="dense-source">
                     <span class="edition-favicon mono-favicon"><img data-preview-favicon alt="" hidden></span>
@@ -305,7 +276,7 @@
                     <div data-preview-image-empty>No preview image returned</div>
                   </div>
                   <p class="dense-deck tabloid-deck" data-preview-description>No description returned.</p>
-                  <div class="tabloid-standfirst" aria-hidden="true">The complete story, fetched and composed from a single public page.</div>
+                  <div class="tabloid-standfirst" aria-hidden="true">Blah blah blah blah blah. Blahs blahss blaghhh.</div>
                   <div class="tabloid-footer">
                     <div class="dense-source tabloid-source">
                       <span class="edition-favicon"><img data-preview-favicon alt="" hidden></span>
@@ -313,12 +284,12 @@
                       <a class="edition-link" data-preview-url href="#" target="_blank" rel="noreferrer noopener"></a>
                     </div>
                     <div class="tabloid-fillers" aria-hidden="true">
-                      <section><h4>The story at a glance</h4><p>Headline and artwork lead the page.</p><div class="filler-lines"><span></span><span></span></div></section>
-                      <section><h4>Built for any screen</h4><p>Editorial structure that travels well.</p><div class="filler-lines"><span></span><span></span></div></section>
-                      <section><h4>Read, share, return</h4><p>A clear source closes the edition.</p><div class="filler-lines"><span></span><span></span></div></section>
+                      <section><h4>Blah blah blah blah blah. Blahs blahss blaghhh.</h4><p>Blah blah blah blah blah. Blahs blahss blaghhh.</p><div class="filler-lines"><span></span><span></span></div></section>
+                      <section><h4>Blah blah blah blah blah. Blahs blahss blaghhh.</h4><p>Blah blah blah blah blah. Blahs blahss blaghhh.</p><div class="filler-lines"><span></span><span></span></div></section>
+                      <section><h4>Blah blah blah blah blah. Blahs blahss blaghhh.</h4><p>Blah blah blah blahblah. Blahsblahss blaghhh.</p><div class="filler-lines"><span></span><span></span></div></section>
                     </div>
                   </div>
-                  <div class="tabloid-signoff" aria-hidden="true">Build boldly · publish clearly · read everywhere</div>
+                  <div class="tabloid-signoff" aria-hidden="true">Blah blah blah blah blah. Blahs blahss blaghhh.</div>
                 </article>
 
                 <article class="edition dense-edition dense-archive">
@@ -335,10 +306,10 @@
                   <p class="dense-deck archive-deck" data-preview-description>No description returned.</p>
                   <div class="dense-story-grid archive-story-grid">
                     <div class="filler-column" aria-hidden="true">
-                      <section><h4>Top stories</h4><p>Every link begins with a source, a title, and a visual signal.</p></section>
-                      <section><h4>Built for developers</h4><p>The edition balances structure with flexible content.</p><div class="filler-lines"><span></span><span></span></div></section>
-                      <section><h4>Security at the edge</h4><p>Public addresses are checked before the presses roll.</p><div class="filler-lines"><span></span><span></span><span></span></div></section>
-                      <section><h4>Reliable by design</h4><p>Responsive columns preserve the hierarchy.</p></section>
+                      <section><h4>Blah blah blah blah blah. Blahs blahss blaghhh.</h4><p>Blah blah blah blah blah. Blahs blahss blaghhh.</p></section>
+                      <section><h4>Blah blah blah blah blah. Blahs blahss blaghhh.</h4><p>Blah blah blah blah blah. Blahs blahss blaghhh.</p><div class="filler-lines"><span></span><span></span></div></section>
+                      <section><h4>Blah blah blah blah blah. Blahs blahss blaghhh.</h4><p>Blah blah blah blah blah. Blahs blahss blaghhh.</p><div class="filler-lines"><span></span><span></span><span></span></div></section>
+                      <section><h4>Blah blah blah blah blah. Blahs blahss blaghhh.</h4><p>Blah blah blah blah blah. Blahs blahss blaghhh.</p></section>
                     </div>
                     <div class="dense-center">
                       <div class="edition-image dense-image dense-image-mono archive-image">
@@ -347,24 +318,24 @@
                       </div>
                     </div>
                     <div class="filler-column" aria-hidden="true">
-                      <section><h4>Inside the network</h4><p>Compressed artwork keeps the edition light enough to travel.</p><div class="filler-lines"><span></span><span></span></div></section>
-                      <section><h4>Observability first</h4><p>Response details remain close at hand below every design.</p></section>
-                      <section><h4>Open &amp; interoperable</h4><p>A simple schema can feed many different front pages.</p><div class="filler-lines"><span></span><span></span><span></span></div></section>
-                      <section><h4>Trusted worldwide</h4><p>The publisher mark carries through every edition.</p></section>
+                      <section><h4>Blah blah blah blah blah. Blahs blahss blaghhh.</h4><p>Blah blah blah blah blah. Blahs blahss blaghhh.</p><div class="filler-lines"><span></span><span></span></div></section>
+                      <section><h4>Blah blah blah blah blah. Blahs blahss blaghhh.</h4><p>Blah blah blah blah blah. Blahs blahss blaghhh.</p></section>
+                      <section><h4>Blah blah blah blah blah. Blahs blahss blaghhh.</h4><p>Blah blah blah blah blah. Blahs blahss blaghhh.</p><div class="filler-lines"><span></span><span></span><span></span></div></section>
+                      <section><h4>Blah blah blah blah blah. Blahsblahss blaghhh.</h4><p>Blahblahblahblahblah. Blahsblahssblaghhh.</p></section>
                     </div>
                   </div>
                   <div class="archive-columns" aria-hidden="true">
-                    <section><h4>From the desk</h4><p>The page is ready for print, preview, and reference.</p><div class="filler-lines"><span></span><span></span><span></span></div></section>
-                    <section><h4>Inside the network</h4><p>Every request becomes a composed editorial object.</p><div class="filler-lines"><span></span><span></span></div></section>
-                    <section><h4>By the numbers</h4><p>One page. Nine designs. A single source of truth.</p><div class="filler-lines"><span></span><span></span><span></span></div></section>
-                    <section><h4>Page notes</h4><p>Filler copy is decorative; the live story remains clear.</p><div class="filler-lines"><span></span><span></span></div></section>
+                    <section><h4>Blah blah blah blah blah. Blahs blahss blaghhh.</h4><p>Blah blah blah blah blah. Blahs blahss blaghhh.</p><div class="filler-lines"><span></span><span></span><span></span></div></section>
+                    <section><h4>Blah blah blah blah blah. Blahs blahss blaghhh.</h4><p>Blah blah blah blah blah. Blahs blahss blaghhh.</p><div class="filler-lines"><span></span><span></span></div></section>
+                    <section><h4>Blah blah blah blah blah. Blahs blahss blaghhh.</h4><p>One page. Nine designs. A single source of truth.</p><div class="filler-lines"><span></span><span></span><span></span></div></section>
+                    <section><h4>Blah blah blah blah blah. Blahs blahss blaghhh.</h4><p>Blah blah blah blah blah. Blahs blahss blaghhh.</p><div class="filler-lines"><span></span><span></span></div></section>
                   </div>
                   <footer class="dense-source archive-source">
                     <span class="edition-favicon mono-favicon"><img data-preview-favicon alt="" hidden></span>
                     <div><strong data-preview-site>Unknown site</strong><span data-preview-type>website</span></div>
                     <a class="edition-link" data-preview-url href="#" target="_blank" rel="noreferrer noopener"></a>
                   </footer>
-                  <div class="archive-signoff" aria-hidden="true">Fast network · smart security · global scale · built for readers</div>
+                  <div class="archive-signoff" aria-hidden="true">Blah blah blah blah blah. Blahs blahss blaghhh.</div>
                 </article>
               </div>
             </div>
@@ -373,7 +344,7 @@
           <section class="inspection-section" aria-labelledby="details-title">
             <div class="section-heading">
               <div>
-                <p class="section-number">03 / Inspect</p>
+                <p class="section-number">Inspect</p>
                 <h2 id="details-title">Response details</h2>
               </div>
               <button id="copy-json" class="secondary-button" type="button">Copy full JSON</button>
@@ -418,7 +389,6 @@
 
       <footer>
         <span>ogp-worker</span>
-        <a href="/health" target="_blank" rel="noreferrer">Health endpoint ↗</a>
       </footer>
     </div>
   </body>
