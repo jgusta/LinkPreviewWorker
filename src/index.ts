@@ -1,18 +1,15 @@
 import { embedAsset } from "./assets";
-import { getCachedPreview, PARTIAL_CACHE_CONTROL, PERMANENT_CACHE_CONTROL } from "./cache";
 import { errorMessage, HttpError } from "./errors";
 import { extractMetadata } from "./metadata";
 import {
   fetchWithValidatedRedirects,
   normalizePublicUrl,
   parsePositiveInteger,
-  readResponseBytes,
   readResponsePrefix,
 } from "./network";
 import type { EmbeddedAsset, LinkPreview, PreviewOptions } from "./types";
 
 const USER_AGENT = "ogp-worker/0.1 (+https://workers.cloudflare.com/)";
-const MAX_REQUEST_BODY_BYTES = 8 * 1024;
 
 export default {
   async fetch(request: Request, env: Env): Promise<Response> {
@@ -29,22 +26,23 @@ export default {
     try {
       const url = new URL(request.url);
 
-      if (request.method === "GET" && url.pathname === "/health") {
-        return jsonResponse({ ok: true }, 200, corsHeaders);
+      if (request.method !== "GET" && request.method !== "HEAD") {
+        const headers = new Headers(corsHeaders);
+        headers.set("allow", "GET, HEAD, OPTIONS");
+        return jsonResponse({ error: { code: "method_not_allowed", message: "Use GET or HEAD." } }, 405, headers);
       }
 
-      if (url.pathname !== "/preview" || (request.method !== "GET" && request.method !== "POST")) {
-        if (request.method === "GET" || request.method === "HEAD") {
-          return env.ASSETS.fetch(request);
-        }
-        throw new HttpError(404, "not_found", "Route not found.");
+      if (url.pathname === "/health") {
+        return headResponse(request, jsonResponse({ ok: true }, 200, corsHeaders));
       }
 
-      const options = await parsePreviewOptions(request, url);
-      const { preview, permanent } = await getCachedPreview(
-        options, env.PREVIEW_CACHE, () => buildPreview(options, env),
-      );
-      return jsonResponse(preview, 200, withCacheHeaders(corsHeaders, permanent));
+      if (url.pathname !== "/preview") {
+        return env.ASSETS.fetch(request);
+      }
+
+      const options = parsePreviewOptions(url);
+      const preview = await buildPreview(options, env);
+      return headResponse(request, jsonResponse(preview, 200, withCacheHeaders(corsHeaders, preview.warnings.length > 0)));
     } catch (error) {
       const httpError = error instanceof HttpError
         ? error
@@ -58,11 +56,11 @@ export default {
         path: new URL(request.url).pathname,
       }));
 
-      return jsonResponse(
+      return headResponse(request, jsonResponse(
         { error: { code: httpError.code, message: httpError.message, requestId } },
         httpError.status,
         corsHeaders,
-      );
+      ));
     }
   },
 } satisfies ExportedHandler<Env>;
@@ -140,52 +138,20 @@ async function buildPreview(options: PreviewOptions, env: Env): Promise<LinkPrev
   };
 }
 
-async function parsePreviewOptions(request: Request, requestUrl: URL): Promise<PreviewOptions> {
-  if (request.method === "GET") {
-    const url = requestUrl.searchParams.get("url")?.trim();
-    if (!url) {
-      throw new HttpError(400, "missing_url", "The url query parameter is required.");
-    }
-
-    const includeAssetsValue = requestUrl.searchParams.get("includeAssets")?.toLowerCase();
-    return { url, includeAssets: includeAssetsValue !== "false" && includeAssetsValue !== "0" };
+function parsePreviewOptions(requestUrl: URL): PreviewOptions {
+  const url = requestUrl.searchParams.get("url")?.trim();
+  if (!url) {
+    throw new HttpError(400, "missing_url", "The url query parameter is required.");
   }
 
-  const contentType = request.headers.get("content-type")?.toLowerCase() ?? "";
-  if (!contentType.includes("application/json")) {
-    throw new HttpError(415, "unsupported_media_type", "POST requests must use application/json.");
-  }
-
-  const body = await readResponseBytes(new Response(request.body), MAX_REQUEST_BODY_BYTES);
-  let parsed: unknown;
-  try {
-    parsed = JSON.parse(new TextDecoder().decode(body));
-  } catch {
-    throw new HttpError(400, "invalid_json", "The request body is not valid JSON.");
-  }
-
-  if (!isRecord(parsed) || typeof parsed.url !== "string" || !parsed.url.trim()) {
-    throw new HttpError(400, "missing_url", "The JSON body must contain a url string.");
-  }
-
-  if (parsed.includeAssets !== undefined && typeof parsed.includeAssets !== "boolean") {
-    throw new HttpError(400, "invalid_include_assets", "includeAssets must be a boolean.");
-  }
-
-  return {
-    url: parsed.url.trim(),
-    includeAssets: parsed.includeAssets ?? true,
-  };
-}
-
-function isRecord(value: unknown): value is Record<string, unknown> {
-  return typeof value === "object" && value !== null && !Array.isArray(value);
+  const includeAssetsValue = requestUrl.searchParams.get("includeAssets")?.toLowerCase();
+  return { url, includeAssets: includeAssetsValue !== "false" && includeAssetsValue !== "0" };
 }
 
 function getCorsHeaders(request: Request, configuredOrigins: string): Headers {
   const headers = new Headers({
     "access-control-allow-headers": "content-type",
-    "access-control-allow-methods": "GET, POST, OPTIONS",
+    "access-control-allow-methods": "GET, HEAD, OPTIONS",
     "access-control-max-age": "86400",
     vary: "Origin",
   });
@@ -203,10 +169,18 @@ function getCorsHeaders(request: Request, configuredOrigins: string): Headers {
   return headers;
 }
 
-function withCacheHeaders(headers: Headers, permanent: boolean): Headers {
+function withCacheHeaders(headers: Headers, hasWarnings: boolean): Headers {
   const result = new Headers(headers);
-  result.set("cache-control", permanent ? PERMANENT_CACHE_CONTROL : PARTIAL_CACHE_CONTROL);
+  result.set("cache-control", hasWarnings
+    ? "public, max-age=300, s-maxage=300"
+    : "public, max-age=300, s-maxage=86400");
   return result;
+}
+
+async function headResponse(request: Request, response: Response): Promise<Response> {
+  if (request.method !== "HEAD") return response;
+  await response.body?.cancel();
+  return new Response(null, { status: response.status, headers: response.headers });
 }
 
 function jsonResponse(body: unknown, status: number, headers = new Headers()): Response {

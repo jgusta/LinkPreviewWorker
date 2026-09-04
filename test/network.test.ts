@@ -3,6 +3,21 @@ import { HttpError } from "../src/errors";
 import { normalizePublicUrl, readResponsePrefix } from "../src/network";
 
 describe("normalizePublicUrl", () => {
+  it.each([
+    ["example.com/article", "https://example.com/article"],
+    [" www.example.com/story?q=one#section ", "https://www.example.com/story?q=one"],
+    ["//example.com/article", "https://example.com/article"],
+    ["example.com:443/article", "https://example.com/article"],
+    ["http://example.com/article", "http://example.com/article"],
+  ])("accepts %s as %s", (input, expected) => {
+    expect(normalizePublicUrl(input).href).toBe(expected);
+  });
+
+  it("preserves relative resolution for metadata and redirects", () => {
+    expect(normalizePublicUrl("../image.png", "http://example.com/news/article").href)
+      .toBe("http://example.com/image.png");
+  });
+
   it("accepts public HTTP URLs and strips fragments", () => {
     expect(normalizePublicUrl("https://example.com/article#section").href).toBe("https://example.com/article");
   });
@@ -15,6 +30,13 @@ describe("normalizePublicUrl", () => {
     "ftp://example.com/file",
     "https://user:password@example.com/",
     "https://example.com:8080/",
+    "example.com:8080/",
+    "localhost",
+    "127.0.0.1",
+    "service.internal/path",
+    "javascript:alert(1)",
+    "mailto:someone@example.com",
+    "",
   ])("rejects unsafe URL %s", (url) => {
     expect(() => normalizePublicUrl(url)).toThrow(HttpError);
   });

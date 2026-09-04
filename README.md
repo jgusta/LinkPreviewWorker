@@ -6,6 +6,9 @@ Open the Worker URL in a browser to use the included test console. It submits UR
 
 ## API
 
+The demo and API accept bare links such as `example.com/article`;
+HTTPS is assumed when the scheme is omitted. Explicit HTTP/HTTPS is preserved.
+
 ```http
 GET /preview?url=https%3A%2F%2Fexample.com
 ```
@@ -16,17 +19,14 @@ To return metadata without downloading or transforming assets:
 GET /preview?url=https%3A%2F%2Fexample.com&includeAssets=false
 ```
 
-POST is also supported:
+HEAD returns the same status and headers without a response body:
 
 ```http
-POST /preview
-Content-Type: application/json
-
-{
-  "url": "https://example.com",
-  "includeAssets": true
-}
+HEAD /preview?url=https%3A%2F%2Fexample.com
 ```
+
+Only GET and HEAD are accepted; OPTIONS supports browser CORS preflight.
+POST and other methods return 405 with `Allow: GET, HEAD, OPTIONS`.
 
 Example response:
 
@@ -60,36 +60,29 @@ Example response:
 
 The main image is resized to at most 800 px wide and encoded as WebP at quality 72. Raster favicons are normalized to a 64×64 PNG; ICO files are retained as-is because Cloudflare Images does not accept ICO input.
 
-## Permanent caching
+## Response caching
 
-Complete previews are stored in the private `ogp` R2 bucket with
-no expiry. They include the image and favicon data URLs and survive deployments
-and edge-cache eviction. Do not add an object-expiration lifecycle rule to this
-bucket. R2 storage and operation charges may apply as the archive grows.
+Cloudflare Workers Cache is enabled in `wrangler.jsonc` with `cache.enabled`.
+No R2 storage or separate dashboard cache rule is required.
 
-- Browser and Cloudflare edge responses use `public, max-age=31536000, immutable`
-  (one year). Edge entries are shared across Worker versions. When an entry is
-  evicted or expires, it is loaded from R2, not rebuilt from the source website.
-- GET and POST share the same persistent snapshot, independent of requesting
-  origin. CORS headers are generated per request; the edge still varies by Origin.
-- Keys use the normalized target URL and `includeAssets` value. Fragments are
-  ignored; query strings are preserved because they can change page content.
-  `requestedUrl` always reflects the current caller's input.
-- Full previews can also satisfy metadata-only requests. A metadata-only snapshot
-  cannot satisfy a request for assets. These variants can represent different
-  points in time if they were first fetched separately.
-- Results with warnings (asset failures or truncated HTML) are cached for only
-  five minutes, not archived. Errors and health responses use `no-store`.
-- Concurrent first requests may duplicate upstream work, but a conditional R2
-  write ensures only the first complete snapshot is retained for each key.
+- Successful previews use `public, max-age=300, s-maxage=86400`: five minutes in
+  the browser and 24 hours at Cloudflare. The entire JSON response, including
+  embedded images, is cached. Cache hits skip Worker execution.
+- On misses, expiry, or eviction, the Worker fetches the page and processes its
+  assets again. There is no permanent archive or background refresh.
+- Results with warnings cache for only five minutes. Errors and health responses
+  use `no-store`. The demo only fetches on submission, never on page load.
+- GET and HEAD share Cloudflare cache entries. A cold HEAD request can still run
+  the preview work, but returns no body.
+- The API request URL (including query parameters) and Origin variant distinguish
+  cached responses. Use consistent URL spelling and options for best reuse;
+  bare and explicit HTTPS inputs may occupy separate edge-cache entries.
+- Cross-version caching is disabled, so deployments start with a fresh edge cache
+  instead of reusing the previous version's year-long responses.
 
-This is a **snapshot archive**, not an automatically refreshing preview service:
-source changes will not appear once saved. There is no public refresh/delete
-endpoint. To replace a snapshot, an administrator must remove its R2 object and
-purge relevant Cloudflare cache entries. Browser copies may remain cached for
-a year; use a new API request URL to bypass those copies after an admin purge.
-Object keys are `previews/v1/<SHA-256>.json`, hashing UTF-8
-`JSON.stringify([normalizedTargetUrl, includeAssets])` (see `src/cache.ts`).
+The old `ogp` bucket is no longer bound or used. Existing objects are not deleted.
+Previously cached browser responses can still persist under their old one-year
+policy; clear the browser cache or use a new API request URL to bypass them.
 
 ## Local development
 
@@ -101,8 +94,6 @@ npm run dev
 Then open [http://localhost:8787](http://localhost:8787) to use the test console.
 
 The Images binding is a remote Cloudflare service. Sign in with Wrangler if local image transformation asks for Cloudflare access. Metadata-only requests (`includeAssets=false`) do not use the binding.
-
-R2 is simulated locally by Wrangler; development does not populate the production archive.
 
 Run all checks:
 
@@ -122,15 +113,6 @@ Runtime settings live in `wrangler.jsonc`:
 Before exposing this Worker publicly, set `ALLOWED_ORIGINS` to your website and add Cloudflare rate limiting. CORS is not authentication; if previews are private or billable, call this endpoint from your own backend or protect it with an authentication layer.
 
 ## Deploy
-
-The Worker uses the existing private `ogp` R2 bucket. For a new account, create
-it once before deploying (skip this if the bucket already exists):
-
-```bash
-npx wrangler r2 bucket create ogp
-```
-
-Do not enable public bucket access or add an expiration lifecycle rule.
 
 ```bash
 npm run deploy:check

@@ -39,13 +39,13 @@
               <p class="section-number">01 / Request</p>
               <h2 id="request-title">Choose a page</h2>
             </div>
-            <span class="hint">HTTP and HTTPS only</span>
+            <span class="hint">HTTPS assumed if omitted</span>
           </div>
 
           <form id="preview-form">
             <label for="url-input">Page URL</label>
             <div class="request-row">
-              <input id="url-input" name="url" type="url" value="https://www.cloudflare.com/" placeholder="https://example.com/article" autocomplete="url" spellcheck="false" required>
+              <input id="url-input" name="url" type="text" inputmode="url" value="https://www.cloudflare.com/" placeholder="example.com/article" autocomplete="url" autocapitalize="none" spellcheck="false" required>
               <button class="primary-button" type="submit">
                 <span class="button-label">Fetch preview</span>
                 <span class="button-loader" aria-hidden="true"></span>

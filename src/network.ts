@@ -24,7 +24,14 @@ export function normalizePublicUrl(rawUrl: string, baseUrl?: string): URL {
   let url: URL;
 
   try {
-    url = baseUrl ? new URL(rawUrl, baseUrl) : new URL(rawUrl);
+    let input = rawUrl.trim();
+    if (!baseUrl) {
+      const hasScheme = /^[a-z][a-z\d+.-]*:/i.test(input);
+      const isBareHostWithPort = /^[^:/?#]+\.[^:/?#]+:\d+(?:[/?#]|$)/.test(input);
+      if (input.startsWith("//")) input = `https:${input}`;
+      else if (input && (!hasScheme || isBareHostWithPort)) input = `https://${input}`;
+    }
+    url = baseUrl ? new URL(input, baseUrl) : new URL(input);
   } catch {
     throw new HttpError(400, "invalid_url", "The URL is not valid.");
   }

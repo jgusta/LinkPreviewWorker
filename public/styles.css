@@ -207,7 +207,7 @@ form > label {
   gap: 10px;
 }
 
-input[type="url"] {
+#url-input {
   width: 100%;
   min-width: 0;
   padding: 16px 17px;
@@ -221,7 +221,7 @@ input[type="url"] {
   transition: border-color .18s, box-shadow .18s;
 }
 
-input[type="url"]:focus {
+#url-input:focus {
   border-color: var(--accent);
   box-shadow: 0 0 0 4px rgb(240 100 58 / 14%);
 }
