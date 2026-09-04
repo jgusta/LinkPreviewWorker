@@ -1,6 +1,6 @@
 # ogp-worker
 
-A Cloudflare Worker that extracts Open Graph/Twitter metadata from a public webpage and returns a compact preview image and favicon as data URLs.
+A Cloudflare Worker that extracts Open Graph/Twitter metadata from a public webpage, returns the preview image URL, and embeds the favicon as a base64 data URL.
 
 Open the Worker URL in a browser to use the included test console. It submits URLs to the API and displays the rendered link card, normalized fields, assets, warnings, metadata, and raw response.
 
@@ -13,7 +13,7 @@ HTTPS is assumed when the scheme is omitted. Explicit HTTP/HTTPS is preserved.
 GET /preview?url=https%3A%2F%2Fexample.com
 ```
 
-To return metadata without downloading or transforming assets:
+To skip downloading and embedding the favicon (the preview image URL is still returned):
 
 ```http
 GET /preview?url=https%3A%2F%2Fexample.com&includeAssets=false
@@ -40,10 +40,7 @@ Example response:
   "siteName": "Example",
   "type": "website",
   "image": {
-    "url": "https://example.com/card.jpg",
-    "data": "data:image/webp;base64,...",
-    "contentType": "image/webp",
-    "size": 42317
+    "url": "https://example.com/card.jpg"
   },
   "favicon": {
     "url": "https://example.com/favicon.ico",
@@ -58,7 +55,13 @@ Example response:
 }
 ```
 
-The main image is resized to at most 800 px wide and encoded as WebP at quality 72. Raster favicons are normalized to a 64×64 PNG; ICO files are retained as-is because Cloudflare Images does not accept ICO input.
+The Worker never downloads or transforms the preview image. Clients use `image.url`
+as the image source; `image` is null when no valid image URL is found. The demo
+loads it only after a submitted preview returns, never on page load. Remote images
+may fail if the source blocks hotlinking or the browser blocks insecure content.
+Raster favicons are normalized to a 64×64 PNG; ICO files are retained as-is because
+Cloudflare Images does not accept ICO input. `includeAssets=false` skips favicon
+embedding but still returns `image: { url }`.
 
 ## Response caching
 
@@ -67,9 +70,10 @@ No R2 storage or separate dashboard cache rule is required.
 
 - Successful previews use `public, max-age=300, s-maxage=86400`: five minutes in
   the browser and 24 hours at Cloudflare. The entire JSON response, including
-  embedded images, is cached. Cache hits skip Worker execution.
+  the embedded favicon and preview image URL, is cached. Cache hits skip Worker execution.
 - On misses, expiry, or eviction, the Worker fetches the page and processes its
-  assets again. There is no permanent archive or background refresh.
+  favicon again. There is no permanent archive or background refresh. The client
+  loads and caches the preview image separately according to the source server's headers.
 - Results with warnings cache for only five minutes. Errors and health responses
   use `no-store`. The demo only fetches on submission, never on page load.
 - GET and HEAD share Cloudflare cache entries. A cold HEAD request can still run

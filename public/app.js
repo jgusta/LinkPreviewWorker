@@ -78,7 +78,7 @@
     setText("#requested-url", data.requestedUrl || "—");
     setText("#final-url", data.url || "—");
     setText("#canonical-url", data.canonicalUrl || "—");
-    setText("#image-info", formatAsset(data.image));
+    setText("#image-info", data.image?.url ? `Loaded by browser · ${data.image.url}` : "Not returned");
     setText("#favicon-info", formatAsset(data.favicon));
 
     for (const previewUrl of document.querySelectorAll("[data-preview-url]")) {
@@ -104,7 +104,7 @@
   }
 
   function renderImages(asset, alt) {
-    const source = asset?.data?.startsWith("data:image/") ? asset.data : safeHttpUrl(asset?.url);
+    const source = safeHttpUrl(asset?.url);
     const images = document.querySelectorAll("[data-preview-image]");
     const emptyStates = document.querySelectorAll("[data-preview-image-empty]");
 

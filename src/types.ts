@@ -18,7 +18,7 @@ export interface LinkPreview {
   description: string | null;
   siteName: string | null;
   type: string | null;
-  image: EmbeddedAsset | null;
+  image: { url: string } | null;
   favicon: EmbeddedAsset | null;
   meta: Record<string, string>;
   warnings: string[];

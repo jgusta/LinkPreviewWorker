@@ -9,12 +9,10 @@ import {
 import type { EmbeddedAsset, FetchSettings } from "./types";
 
 const USER_AGENT = "ogp-worker/0.1 (+https://workers.cloudflare.com/)";
-const MAX_PREVIEW_OUTPUT_BYTES = 2 * 1024 * 1024;
 const MAX_FAVICON_OUTPUT_BYTES = 512 * 1024;
 
-export async function embedAsset(
+export async function embedFavicon(
   assetUrl: string,
-  kind: "image" | "favicon",
   env: Env,
   settings: FetchSettings,
 ): Promise<EmbeddedAsset> {
@@ -31,13 +29,13 @@ export async function embedAsset(
 
   if (!response.ok || !response.body) {
     await response.body?.cancel();
-    throw new HttpError(502, "asset_fetch_failed", `The ${kind} could not be fetched.`);
+    throw new HttpError(502, "asset_fetch_failed", "The favicon could not be fetched.");
   }
 
   const contentLength = Number.parseInt(response.headers.get("content-length") ?? "", 10);
   if (Number.isFinite(contentLength) && contentLength > settings.maxBytes) {
     await response.body.cancel();
-    throw new HttpError(502, "asset_too_large", `The ${kind} is too large.`);
+    throw new HttpError(502, "asset_too_large", "The favicon is too large.");
   }
 
   const sourceContentType = normalizeContentType(response.headers.get("content-type"));
@@ -47,26 +45,21 @@ export async function embedAsset(
 
   if (sourceContentType && !sourceContentType.startsWith("image/") && sourceContentType !== "application/octet-stream") {
     await response.body.cancel();
-    throw new HttpError(502, "invalid_asset_type", `The ${kind} URL did not return an image.`);
+    throw new HttpError(502, "invalid_asset_type", "The favicon URL did not return an image.");
   }
 
-  if (kind === "favicon" && looksLikeIco) {
+  if (looksLikeIco) {
     const bytes = await readResponseBytes(response, Math.min(settings.maxBytes, MAX_FAVICON_OUTPUT_BYTES));
     return toEmbeddedAsset(url, sourceContentType || "image/x-icon", bytes);
   }
 
   const input = limitReadableStream(response.body, settings.maxBytes);
-  const result = kind === "image"
-    ? await env.IMAGES.input(input)
-        .transform({ width: 800, fit: "scale-down" })
-        .output({ format: "image/webp", quality: 72, anim: false })
-    : await env.IMAGES.input(input)
+  const result = await env.IMAGES.input(input)
         .transform({ width: 64, height: 64, fit: "contain", background: "transparent" })
         .output({ format: "image/png", anim: false });
 
   const transformedResponse = result.response();
-  const maxOutputBytes = kind === "image" ? MAX_PREVIEW_OUTPUT_BYTES : MAX_FAVICON_OUTPUT_BYTES;
-  const bytes = await readResponseBytes(transformedResponse, maxOutputBytes);
+  const bytes = await readResponseBytes(transformedResponse, MAX_FAVICON_OUTPUT_BYTES);
   const outputContentType = normalizeContentType(transformedResponse.headers.get("content-type")) || result.contentType();
 
   return toEmbeddedAsset(url, outputContentType, bytes);

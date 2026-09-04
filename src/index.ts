@@ -1,4 +1,4 @@
-import { embedAsset } from "./assets";
+import { embedFavicon } from "./assets";
 import { errorMessage, HttpError } from "./errors";
 import { extractMetadata } from "./metadata";
 import {
@@ -100,26 +100,15 @@ async function buildPreview(options: PreviewOptions, env: Env): Promise<LinkPrev
   const warnings: string[] = htmlTruncated
     ? [`HTML parsing stopped after ${maxHtmlBytes} bytes.`]
     : [];
-  let image: EmbeddedAsset | null = null;
+  const image = metadata.imageUrl ? { url: metadata.imageUrl } : null;
   let favicon: EmbeddedAsset | null = null;
 
   if (options.includeAssets) {
     const settings = { timeoutMs, maxBytes: maxAssetBytes };
-    const [imageResult, faviconResult] = await Promise.allSettled([
-      metadata.imageUrl ? embedAsset(metadata.imageUrl, "image", env, settings) : Promise.resolve(null),
-      embedAsset(metadata.faviconUrl, "favicon", env, settings),
-    ]);
-
-    if (imageResult.status === "fulfilled") {
-      image = imageResult.value;
-    } else {
-      warnings.push(`Preview image omitted: ${errorMessage(imageResult.reason)}`);
-    }
-
-    if (faviconResult.status === "fulfilled") {
-      favicon = faviconResult.value;
-    } else {
-      warnings.push(`Favicon omitted: ${errorMessage(faviconResult.reason)}`);
+    try {
+      favicon = await embedFavicon(metadata.faviconUrl, env, settings);
+    } catch (error) {
+      warnings.push(`Favicon omitted: ${errorMessage(error)}`);
     }
   }
 
