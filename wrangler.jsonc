@@ -30,10 +30,16 @@
     "MAX_ASSET_BYTES": "20971520"
   },
   "observability": {
-    "enabled": true,
     "logs": {
       "enabled": true,
-      "head_sampling_rate": 1
+      "head_sampling_rate": 1,
+      "invocation_logs": true,
+      "persist": true
+    },
+    "traces": {
+      "enabled": true,
+      "head_sampling_rate": 1,
+      "persist": true
     }
   }
 }
