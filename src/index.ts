@@ -1,4 +1,5 @@
 import { embedAsset } from "./assets";
+import { getCachedPreview, PARTIAL_CACHE_CONTROL, PERMANENT_CACHE_CONTROL } from "./cache";
 import { errorMessage, HttpError } from "./errors";
 import { extractMetadata } from "./metadata";
 import {
@@ -40,8 +41,10 @@ export default {
       }
 
       const options = await parsePreviewOptions(request, url);
-      const result = await buildPreview(options, env);
-      return jsonResponse(result, 200, withCacheHeaders(corsHeaders));
+      const { preview, permanent } = await getCachedPreview(
+        options, env.PREVIEW_CACHE, () => buildPreview(options, env),
+      );
+      return jsonResponse(preview, 200, withCacheHeaders(corsHeaders, permanent));
     } catch (error) {
       const httpError = error instanceof HttpError
         ? error
@@ -200,9 +203,9 @@ function getCorsHeaders(request: Request, configuredOrigins: string): Headers {
   return headers;
 }
 
-function withCacheHeaders(headers: Headers): Headers {
+function withCacheHeaders(headers: Headers, permanent: boolean): Headers {
   const result = new Headers(headers);
-  result.set("cache-control", "public, max-age=300, stale-while-revalidate=3600");
+  result.set("cache-control", permanent ? PERMANENT_CACHE_CONTROL : PARTIAL_CACHE_CONTROL);
   return result;
 }
 
@@ -210,5 +213,6 @@ function jsonResponse(body: unknown, status: number, headers = new Headers()): R
   const responseHeaders = new Headers(headers);
   responseHeaders.set("content-type", "application/json; charset=utf-8");
   responseHeaders.set("x-content-type-options", "nosniff");
+  if (!responseHeaders.has("cache-control")) responseHeaders.set("cache-control", "no-store");
   return Response.json(body, { status, headers: responseHeaders });
 }

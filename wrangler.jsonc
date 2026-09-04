@@ -14,8 +14,15 @@
     "binding": "IMAGES"
   },
   "cache": {
-    "enabled": true
+    "enabled": true,
+    "cross_version_cache": true
   },
+  "r2_buckets": [
+    {
+      "binding": "PREVIEW_CACHE",
+      "bucket_name": "ogp"
+    }
+  ],
   "assets": {
     "directory": "./public",
     "binding": "ASSETS",
