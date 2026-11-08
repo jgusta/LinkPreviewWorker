@@ -1,19 +1,19 @@
 import { Buffer } from "node:buffer";
+import sharp from "sharp";
 import { HttpError } from "./errors";
 import {
   fetchWithValidatedRedirects,
-  limitReadableStream,
   normalizePublicUrl,
   readResponseBytes,
 } from "./network";
 import type { EmbeddedAsset, FetchSettings } from "./types";
 
-const USER_AGENT = "ogp-worker/0.1 (+https://workers.cloudflare.com/)";
+const USER_AGENT = "ogp-worker/0.1";
 const MAX_FAVICON_OUTPUT_BYTES = 512 * 1024;
 
 export async function embedFavicon(
   assetUrl: string,
-  env: Env,
+  _env: Env,
   settings: FetchSettings,
 ): Promise<EmbeddedAsset> {
   const { response, url } = await fetchWithValidatedRedirects(
@@ -53,16 +53,12 @@ export async function embedFavicon(
     return toEmbeddedAsset(url, sourceContentType || "image/x-icon", bytes);
   }
 
-  const input = limitReadableStream(response.body, settings.maxBytes);
-  const result = await env.IMAGES.input(input)
-        .transform({ width: 64, height: 64, fit: "contain", background: "transparent" })
-        .output({ format: "image/png", anim: false });
-
-  const transformedResponse = result.response();
-  const bytes = await readResponseBytes(transformedResponse, MAX_FAVICON_OUTPUT_BYTES);
-  const outputContentType = normalizeContentType(transformedResponse.headers.get("content-type")) || result.contentType();
-
-  return toEmbeddedAsset(url, outputContentType, bytes);
+  const input = await readResponseBytes(response, settings.maxBytes);
+  const bytes = await sharp(input, { limitInputPixels: 16_777_216, animated: false })
+    .resize(64, 64, { fit: "contain", background: { r: 0, g: 0, b: 0, alpha: 0 } })
+    .png().toBuffer();
+  if (bytes.length > MAX_FAVICON_OUTPUT_BYTES) throw new HttpError(502, "asset_too_large", "Favicon output is too large.");
+  return toEmbeddedAsset(url, "image/png", bytes);
 }
 
 function toEmbeddedAsset(url: string, contentType: string, bytes: Uint8Array): EmbeddedAsset {

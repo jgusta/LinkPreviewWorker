@@ -1,4 +1,6 @@
-import { exports } from "cloudflare:workers";
+import app from "../src/index";
+import { createEnv } from "../src/config";
+const exports = { default: { fetch: (url: string) => app.fetch(new Request(url), createEnv()) } };
 import { describe, expect, it } from "vitest";
 
 describe("HTTP API", () => {
@@ -20,7 +22,7 @@ describe("HTTP API", () => {
 
   it("validates the preview URL", async () => {
     const response = await exports.default.fetch("https://worker.example/preview?url=http://localhost");
-    const body = await response.json<{ error: { code: string } }>();
+    const body = await response.json() as { error: { code: string } };
 
     expect(response.status).toBe(400);
     expect(body.error.code).toBe("unsafe_url");

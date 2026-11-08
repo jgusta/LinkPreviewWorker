@@ -4,19 +4,25 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "dev": "wrangler dev",
-    "deploy": "wrangler deploy",
-    "deploy:check": "wrangler deploy --dry-run",
-    "types": "wrangler types",
+    "dev": "tsx watch src/server.ts",
+    "start": "node dist/server.js",
+    "build": "esbuild src/server.ts --bundle --platform=node --format=esm --packages=external --outfile=dist/server.js",
     "typecheck": "tsc --noEmit",
     "test": "vitest run",
-    "check": "npm run types && npm run typecheck && npm test && npm run deploy:check"
+    "check": "npm run typecheck && npm test && npm run build"
+  },
+  "engines": { "node": ">=24.0.0" },
+  "dependencies": {
+    "cheerio": "^1.1.2",
+    "sharp": "^0.34.4",
+    "undici": "^7.16.0",
+    "ipaddr.js": "^2.2.0"
   },
   "devDependencies": {
-    "@cloudflare/vitest-pool-workers": "latest",
     "@types/node": "^26.2.0",
     "typescript": "latest",
     "vitest": "latest",
-    "wrangler": "latest"
+    "tsx": "^4.20.6",
+    "esbuild": "^0.25.10"
   }
 }

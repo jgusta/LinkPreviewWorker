@@ -1,9 +1,10 @@
-import { env } from "cloudflare:workers";
+import { createEnv } from "../src/config";
 import { afterEach, describe, expect, it, vi } from "vitest";
 import worker from "../src/index";
 import type { LinkPreview } from "../src/types";
 
 afterEach(() => vi.restoreAllMocks());
+const env = createEnv();
 
 function mockPage() {
   return vi.spyOn(globalThis, "fetch").mockImplementation(async () => new Response(
@@ -30,7 +31,7 @@ describe("read-only response caching", () => {
       `https://worker.example/preview?url=example.com/article&includeAssets=${includeAssets}`,
     ), env);
     expect(response.status).toBe(200);
-    const preview = await response.json<LinkPreview>();
+    const preview = await response.json() as LinkPreview;
     expect(preview.image).toEqual({ url: "https://example.com/photo.jpg" });
     expect(preview.warnings).toEqual([]);
     if (includeAssets) {
@@ -54,7 +55,7 @@ describe("read-only response caching", () => {
       expect(response.headers.get("cache-control")).toBe("public, max-age=300, s-maxage=86400");
       expect(response.headers.get("access-control-allow-origin")).toBe("https://crazywall.cc");
       expect(response.headers.get("vary")).toBe("Origin");
-      expect((await response.json<LinkPreview>()).url).toBe("https://example.com/");
+      expect((await response.json() as LinkPreview).url).toBe("https://example.com/");
     }
     expect(upstream).toHaveBeenCalledTimes(2);
   });
@@ -66,7 +67,7 @@ describe("read-only response caching", () => {
     const response = await worker.fetch(new Request("https://worker.example/preview?url=example.com"), env);
     expect(response.status).toBe(200);
     expect(response.headers.get("cache-control")).toBe("public, max-age=300, s-maxage=300");
-    expect((await response.json<LinkPreview>()).warnings.length).toBeGreaterThan(0);
+    expect((await response.json() as LinkPreview).warnings.length).toBeGreaterThan(0);
   });
 
   it.each(["POST", "PUT", "PATCH", "DELETE"])("rejects %s without upstream work", async (method) => {

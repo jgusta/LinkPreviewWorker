@@ -41,7 +41,9 @@ export default {
       }
 
       const options = parsePreviewOptions(url);
-      const preview = await buildPreview(options, env);
+      const preview = env.CACHE
+        ? await env.CACHE.get(options, () => buildPreview(options, env))
+        : await buildPreview(options, env);
       return headResponse(request, jsonResponse(preview, 200, withCacheHeaders(corsHeaders, preview.warnings.length > 0)));
     } catch (error) {
       const httpError = error instanceof HttpError
@@ -63,7 +65,7 @@ export default {
       ));
     }
   },
-} satisfies ExportedHandler<Env>;
+};
 
 async function buildPreview(options: PreviewOptions, env: Env): Promise<LinkPreview> {
   const pageUrl = normalizePublicUrl(options.url);

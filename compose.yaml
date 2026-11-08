@@ -1,0 +1,13 @@
+services:
+  ogp:
+    build: .
+    restart: unless-stopped
+    ports:
+      - "3000:3000"
+    environment:
+      ALLOWED_ORIGINS: ${ALLOWED_ORIGINS:-https://crazywall.cc,https://ogp.crazywall.cc}
+      CACHE_TTL_SECONDS: ${CACHE_TTL_SECONDS:-86400}
+    volumes:
+      - previews:/data
+volumes:
+  previews:

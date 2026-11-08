@@ -1,7 +1,10 @@
 import { normalizePublicUrl } from "./network";
+import { load } from "cheerio";
 import type { ExtractedMetadata, FaviconCandidate } from "./types";
 
 const MAX_META_FIELDS = 100;
+interface Element { getAttribute(name: string): string | null }
+interface Text { text: string }
 const MAX_META_VALUE_LENGTH = 4_000;
 
 interface CollectorState {
@@ -94,14 +97,19 @@ export async function extractMetadata(
     title: "",
   };
 
-  const transformed = new HTMLRewriter()
-    .on("meta", new MetaHandler(state))
-    .on("link", new LinkHandler(state))
-    .on("base", new BaseHandler(state))
-    .on("title", new TitleHandler(state))
-    .transform(new Response(html, { headers: { "content-type": contentType } }));
-
-  await transformed.text();
+  const charset = contentType.match(/charset=["']?([^;\s"']+)/i)?.[1] || "utf-8";
+  let decoded: string;
+  try { decoded = new TextDecoder(charset).decode(html); }
+  catch { decoded = new TextDecoder().decode(html); }
+  const $ = load(decoded);
+  for (const [selector, handler] of [
+    ["meta", new MetaHandler(state)], ["link", new LinkHandler(state)], ["base", new BaseHandler(state)],
+  ] as const) {
+    $(selector).each((_, element) => {
+      handler.element({ getAttribute: (name) => $(element).attr(name) ?? null });
+    });
+  }
+  new TitleHandler(state).text({ text: $("title").first().text() });
 
   const documentBaseUrl = resolveOptionalUrl(state.baseHref, finalPageUrl) ?? finalPageUrl;
   const title = firstValue(state.meta["og:title"], state.meta["twitter:title"], cleanText(state.title));

@@ -1,4 +1,5 @@
 import { HttpError } from "./errors";
+import { publicDispatcher } from "./transport";
 
 const REDIRECT_STATUSES = new Set([301, 302, 303, 307, 308]);
 const BLOCKED_HOST_SUFFIXES = [
@@ -75,13 +76,15 @@ export async function fetchWithValidatedRedirects(
     let response: Response;
 
     try {
-      response = await fetch(currentUrl, {
+      const options = {
         ...init,
         redirect: "manual",
         signal: AbortSignal.timeout(timeoutMs),
-      });
+        dispatcher: publicDispatcher,
+      } satisfies RequestInit & { dispatcher: typeof publicDispatcher };
+      response = await fetch(currentUrl, options);
     } catch (error) {
-      if (error instanceof Error && error.name === "AbortError") {
+      if (error instanceof Error && (error.name === "AbortError" || error.name === "TimeoutError")) {
         throw new HttpError(504, "upstream_timeout", "The remote server took too long to respond.");
       }
 
