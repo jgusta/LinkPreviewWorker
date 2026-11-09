@@ -1,6 +1,10 @@
 services:
   ogp:
-    build: .
+    build:
+      context: .
+      args:
+        APP_UID: ${UID:-1000}
+        APP_GID: ${GID:-1000}
     restart: unless-stopped
     ports:
       - "3000:3000"

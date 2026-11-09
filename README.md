@@ -53,7 +53,8 @@ returns the image URL. The console at `/` makes no preview requests on page load
 2. Choose the **Dockerfile** build pack, base directory `/`, Dockerfile `/Dockerfile`.
 3. Set **Ports Exposes** to `3000` and configure your desired HTTPS domain.
 4. Add a **Volume Mount** with destination `/data` under Persistent Storage.
-   The container runs as UID/GID 1000; bind mounts must be writable by that user.
+   The container defaults to UID/GID 1000; bind mounts must be writable by the
+   configured user and group.
 5. Set `ALLOWED_ORIGINS` to your client origins, for example
    `https://crazywall.cc,https://ogp.crazywall.cc`.
 6. Deploy. The Docker image provides its own health check at `/health`. Enable
@@ -65,6 +66,29 @@ Keeping the same hostname and `/preview` path avoids changing client URLs.
 This conversion does not change DNS or delete the old Worker or R2 bucket.
 
 ## Cache and configuration
+
+### Container user and storage permissions
+
+Set `APP_UID` and `APP_GID` to the numeric user/group IDs you want the container
+to run as (both default to `1000`). In Coolify's Dockerfile mode, add these as
+environment variables with **Available at Buildtime** enabled, then rebuild.
+They are Docker build arguments; runtime-only environment variables do not
+change the container's user.
+
+For example, `APP_UID=1001` and `APP_GID=1001` produce an image running as
+`1001:1001`. With Compose, set these variables in `.env` before running
+`docker compose up --build -d`. Direct Docker builds can use:
+
+```bash
+docker build --build-arg APP_UID=1001 --build-arg APP_GID=1001 -t ogp-worker .
+```
+
+The image's `/data` directory is owned by these IDs. Existing volumes and bind
+mounts keep their host ownership; give the chosen IDs write access on the VPS.
+Changing the IDs requires rebuilding the image and updating existing storage
+permissions as appropriate.
+
+### Preview cache
 
 SQLite stores the complete preview, embedded favicon, fetch time and expiry on
 the persistent volume. Default freshness is one day; results with warnings expire
@@ -117,5 +141,6 @@ npm run check
 docker compose up --build -d
 ```
 
-Compose mounts a named volume at `/data`. Coolify's Dockerfile mode instead uses
-the persistent volume configured in its dashboard.
+Compose mounts `${DATA_VOL:-/data/vol/link-preview}` from the host at `/data`.
+Set `DATA_VOL` to change the host directory. Coolify's Dockerfile mode instead
+uses the persistent volume configured in its dashboard.
