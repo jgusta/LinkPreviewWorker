@@ -8,6 +8,4 @@ services:
       ALLOWED_ORIGINS: ${ALLOWED_ORIGINS:-https://crazywall.cc,https://ogp.crazywall.cc}
       CACHE_TTL_SECONDS: ${CACHE_TTL_SECONDS:-86400}
     volumes:
-      - previews:/data
-volumes:
-  previews:
+      - ${DATA_VOL:-/data/vol/link-preview}:/data
