@@ -9,7 +9,7 @@ import { publicDispatcher } from "./transport";
 
 const env = createEnv();
 env.CACHE = new PreviewCache(
-  process.env.CACHE_DB_PATH ?? "./data/previews.sqlite",
+  process.env.CACHE_DB_PATH ?? "/data/previews.sqlite",
   parsePositiveInteger(process.env.CACHE_TTL_SECONDS ?? "", 86400, 31536000),
   parsePositiveInteger(process.env.CACHE_MAX_ENTRIES ?? "", 10000, 1000000),
 );
